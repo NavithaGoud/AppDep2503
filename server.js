@@ -27,12 +27,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-
-app.get("*",(req,res)=>{
-  res.sendFile("./client/build/index.html");
-})
-
-
 app.post("/validateToken",upload.none(),async(req,res)=>{
   console.log(req.body);
   let decryptedCredintials = jwt.verify(req.body.token,"navi");
@@ -112,7 +106,9 @@ app.listen(3333,()=>{
     console.log("Listening to port 3333");
 })
 
-
+app.get("*",(req,res)=>{
+  res.sendFile("./client/build/index.html");
+})
 
 let userSchema = new mongoose.Schema({
     firstName:String,
