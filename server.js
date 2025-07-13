@@ -2,13 +2,15 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const path = require("path")
 
 let app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
-app.use('/profilePics', express.static('profilePics'))
+app.use('/profilePics', express.static('profilePics'));
+app.use(express.static(path.join(__dirname,"./client/build")));
 
 
 
@@ -23,6 +25,13 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage });
+
+
+
+app.get("*",(req,res)=>{
+  res.sendFile("./client/build/index.html");
+})
+
 
 app.post("/validateToken",upload.none(),async(req,res)=>{
   console.log(req.body);
@@ -102,6 +111,7 @@ app.post("/signup",upload.single("profilePic"),async(req,res)=>{
 app.listen(3333,()=>{
     console.log("Listening to port 3333");
 })
+
 
 
 let userSchema = new mongoose.Schema({
